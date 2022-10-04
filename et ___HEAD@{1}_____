@@ -1,0 +1,17 @@
+[33mcommit f0dfa5d5c8e7d4963067fd607be96182eeb5ba30[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: vlds1 <vlad.sergienko00@yandex.ru>
+Date:   Thu Sep 29 12:46:25 2022 -0800
+
+    chat rooms added
+
+[33mcommit 716894fcf3d71c5950116760cecfbd0b6afed151[m
+Author: vlds1 <vlad.sergienko00@yandex.ru>
+Date:   Mon Sep 26 11:01:08 2022 -0800
+
+    added simplest chat room
+
+[33mcommit b257879dc6ce6cda7411ddfe7450d5a16ed2c044[m
+Author: vlds1 <vlad.sergienko00@yandex.ru>
+Date:   Sat Sep 24 14:13:49 2022 -0800
+
+    skeleton of chat

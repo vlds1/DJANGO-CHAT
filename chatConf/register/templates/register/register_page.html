@@ -1,0 +1,15 @@
+{% extends 'register/index.html' %}
+
+{% block content %}
+    <div class="register_page">
+        <div class="register_page_inner">
+            <div class="title">Register page</div>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type='submit'>Sign up</button>
+            </form>
+            Have account? <a href="{% url 'login_page' %}">Sign in</a>
+        </div>
+    </div>
+{% endblock  %}

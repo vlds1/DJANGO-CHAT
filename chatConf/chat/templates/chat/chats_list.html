@@ -1,0 +1,137 @@
+{% extends 'chat/index.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static '/chat/css/chats_list.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="main_page">
+        <div class="main_page_inner">
+            <div class="chat_actions">
+            <div class="chat_action">
+                <input
+                    type="text" 
+                    id="add_chat"  
+                    class="chat_action_inp" 
+                    placeholder="Add chat (enter chat name)"
+                >
+                <button
+                    id="add_chat_btn" 
+                    class="chat_action_btn" 
+                >
+                    +
+                </button>
+            </div>
+            <div class="chat_action">
+                <input
+                    type="text" 
+                    id="delete_chat_inp"  
+                    class="chat_action_inp" 
+                    placeholder="Delete chat (enter chat name)"
+                >
+                <button
+                    id="delete_chat_btn" 
+                    class="chat_action_btn" 
+                >
+                    -
+                </button>
+            </div>
+        </div>
+            <div class="chats">
+                <ul id="chats">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = LoadChats
+
+        const chatsListSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/list/'
+        )
+
+        chatsListSocket.onmessage = function(e){
+            const data = JSON.parse(e.data)
+
+            if(localStorage.getItem('chats')){
+                localStorage.chats += ` ${data.chat_name}`
+            }else{
+                localStorage.setItem('chats', data.chat_name)
+            }
+            
+            CraeteChat(data.chat_name)
+        }
+        
+        function CraeteChat(chat_name){
+            let li = document.createElement('li')
+            let a = document.createElement('a')
+
+            li.className="chat"
+            li.id = "chat"
+            a.className = 'chat_name'
+            a.innerHTML = chat_name
+            a.id = chat_name
+            a.href = chat_name + '/'
+
+            document.querySelector('#chats').prepend(li)
+            document.querySelector('#chat').prepend(a)
+        }
+
+        function LoadChats(){
+            const chats = localStorage.getItem('chats')
+            const chats_list = chats.split(' ')
+
+            if (chats == ''){
+                localStorage.removeItem('chats')
+            }else{
+                for(chat=0; chat < chats_list.length; chat++){
+                    CraeteChat(chats_list[chat])
+                }
+            }
+        }
+
+        document.querySelector('#add_chat').onkeyup = function(e){
+            if(e.keyCode === 13){
+                document.querySelector('#add_chat_btn').click()
+            }
+        }
+
+        document.querySelector('#add_chat_btn').onclick = function(e){
+            const addChatInput = document.querySelector('#add_chat')
+            const chat_name = addChatInput.value
+            chatsListSocket.send(JSON.stringify({
+                'chat_name': chat_name
+            }))
+            addChatInput.value = ''
+        }
+
+        document.querySelector('#delete_chat_inp').onkeyup = function(e){
+            if(e.keyCode === 13){
+                document.querySelector('#delete_chat_btn').click()
+            }
+        }
+        document.querySelector('#delete_chat_btn').onclick = function(e){
+            const chat_to_delete = document.querySelector('#delete_chat_inp')
+            var chats = localStorage.chats.split(' ')
+            for(chat=0; chat<chats.length; chat++){
+                if(chat_to_delete.value === chats[chat]){
+                    chats.splice(chat, 1)
+                    break
+                }
+            }
+            localStorage.chats = chats.join(' ')
+
+            var parent = document.querySelector('#chats') 
+            while(parent.firstChild){
+                parent.removeChild(parent.firstChild)
+            }
+
+            LoadChats()
+            chat_to_delete.value = ''
+        }
+    </script>
+{% endblock  %}

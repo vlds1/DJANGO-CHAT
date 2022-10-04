@@ -1,0 +1,21 @@
+.main_page{
+    height: 100vh;
+    width: 100vw;
+}
+.main_page_inner{
+    height: inherit;
+    width: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.join_btn{
+    padding: 15px 30px;
+    font-size: 28px;
+    
+    color: black;
+    text-decoration: none;
+    
+    border: 1px solid gray;
+    border-radius: 5px;
+}

@@ -1,0 +1,79 @@
+{% extends 'chat/index.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'chat/css/chat.css' %}">
+{% endblock  %}
+
+{% block content %}
+    <div class="chat">
+        <div class="chat_inner">
+            <div class="chat_header">
+                <a class="back" href="javascript:history.back();"><</a>
+                <div class="title">
+                    {{chat_name}}
+                </div>
+            </div>
+            <textarea
+                id="chat_messages" 
+                class="chat_messages"  
+                disabled
+            ></textarea>
+            <div class="send_message">
+                <input 
+                    class="send_message_inp" 
+                    id="message" 
+                    placeholder="Message" 
+                    type="text"
+                >
+                <button 
+                    class="send_message_btn" 
+                    id="send_message_btn"
+                >
+                    >
+                </button>
+            </div>
+
+        </div>
+    </div>
+    {{chat_name|json_script:"chat_name"}}
+
+    <script>
+        const chat_name = JSON.parse(
+            document.getElementById('chat_name').textContent
+            )
+
+        var chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + chat_name
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e){
+            const data = JSON.parse(e.data)
+            console.log(data['message'])
+            document.querySelector('#chat_messages').value += data['message'] + '\n'
+        }
+
+        document.querySelector('#message').focus()
+        document.querySelector('#message').onkeyup = function(e){
+            if(e.keyCode === 13){
+                document.querySelector("#send_message_btn").click()
+            }
+        }
+        document.querySelector('#send_message_btn').onclick = function(e){
+            const data = document.querySelector('#message')
+            const message = data.value
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }))
+            data.value = ''
+            document.querySelector('#message').focus()
+        }
+
+
+        
+    </script>
+{% endblock  %}
