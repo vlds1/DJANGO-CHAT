@@ -13,18 +13,14 @@
     </div>
     
     <script>
+        if(localStorage.getItem('joined')){
+            window.location.replace(
+                'http://127.0.0.1:8000/auth/login/'
+            )
+        }
+
         document.querySelector('#join_btn').onclick = function(){
             localStorage.joined = true
         }
-
-        function redirect(){
-            if(localStorage.getItem('joined')){
-                window.location.replace(
-                    'http://127.0.0.1:8000/auth/register/'
-                    )
-                }
-            }
-
-        window.onload = redirect
     </script>
 {% endblock  %}

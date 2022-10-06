@@ -7,37 +7,40 @@
 
 {% block content %}
     <div class="main_page">
+        <div class="logout">
+            <a href="{% url 'logout' %}">logout</a>
+        </div>
         <div class="main_page_inner">
             <div class="chat_actions">
-            <div class="chat_action">
-                <input
-                    type="text" 
-                    id="add_chat"  
-                    class="chat_action_inp" 
-                    placeholder="Add chat (enter chat name)"
-                >
-                <button
-                    id="add_chat_btn" 
-                    class="chat_action_btn" 
-                >
-                    +
-                </button>
+                <div class="chat_action">
+                    <input
+                        type="text" 
+                        id="add_chat"  
+                        class="chat_action_inp" 
+                        placeholder="Add chat (enter chat name)"
+                    >
+                    <button
+                        id="add_chat_btn" 
+                        class="chat_action_btn" 
+                    >
+                        +
+                    </button>
+                </div>
+                <div class="chat_action">
+                    <input
+                        type="text" 
+                        id="delete_chat_inp"  
+                        class="chat_action_inp" 
+                        placeholder="Delete chat (enter chat name)"
+                    >
+                    <button
+                        id="delete_chat_btn" 
+                        class="chat_action_btn" 
+                    >
+                        -
+                    </button>
+                </div>
             </div>
-            <div class="chat_action">
-                <input
-                    type="text" 
-                    id="delete_chat_inp"  
-                    class="chat_action_inp" 
-                    placeholder="Delete chat (enter chat name)"
-                >
-                <button
-                    id="delete_chat_btn" 
-                    class="chat_action_btn" 
-                >
-                    -
-                </button>
-            </div>
-        </div>
             <div class="chats">
                 <ul id="chats">
                 </ul>

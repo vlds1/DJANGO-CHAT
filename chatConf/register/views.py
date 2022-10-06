@@ -43,4 +43,4 @@ class Auth:
     @staticmethod
     def logout_user(request):
         logout(request)
-        return redirect('login_page')
+        return redirect('join_chat')
