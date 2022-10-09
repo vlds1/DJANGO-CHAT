@@ -18,7 +18,9 @@ class Auth:
                 return redirect('login_page')
             
         form = UserRegisterForm()
-        context = {'form': form}
+        context = {
+            'form': form
+            }
         return render(request, 'register/register_page.html', context)
     
     @staticmethod
@@ -29,14 +31,19 @@ class Auth:
             username = request.POST['username']
             password = request.POST['password']
             print(username, password)
-            user = authenticate(request, username=username, password=password)
-            print(user)
+            user = authenticate(
+                request, 
+                username=username, 
+                password=password
+            )
             if user is not None:
                 login(request, user)
                 return redirect('chats_list')
             
         form = UserLoginForm()
-        context = {'form': form}
+        context = {
+            'form': form
+            }
         return render(request, 'register/login_page.html', context)
             
     

@@ -53,8 +53,12 @@
 
         chatSocket.onmessage = function(e){
             const data = JSON.parse(e.data)
-            console.log(data['message'])
-            document.querySelector('#chat_messages').value += data['message'] + '\n'
+            console.log(data)
+            document.querySelector('#chat_messages').value += 
+                data['user'] 
+                + ': '
+                + data['message'] 
+                + '\n'
         }
 
         document.querySelector('#message').focus()

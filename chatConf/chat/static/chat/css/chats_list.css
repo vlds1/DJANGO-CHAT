@@ -84,7 +84,7 @@
     color: black;
 
     height: 100%;
-    width: 100%;
+    width: 90%;
     padding-left: 15px;
 
     transition: .5s;
@@ -92,4 +92,15 @@
 .chat_name:hover{
     overflow: hidden;
     padding-left: 35px;
+}
+.delete_room_btn{
+    cursor: pointer;
+    width: 10%;
+    background: none;
+    border: none;
+    transition: .5s;
+}
+.delete_room_btn:hover{
+    font-size: 24px;
+    transform: rotate(180deg);
 }
