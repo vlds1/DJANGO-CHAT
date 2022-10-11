@@ -4,11 +4,11 @@ from .forms import *
 
 # Create your views here.
 class Auth:
-    
     @staticmethod
     def register_user(request):
         if request.user.is_authenticated == True:
             return redirect('chats_list')
+
         if request.method == 'POST':
             form = UserRegisterForm(request.POST)
             if form.is_valid():
@@ -27,6 +27,7 @@ class Auth:
     def login_user(request):
         if request.user.is_authenticated == True:
             return redirect('chats_list')
+
         if request.method == 'POST':
             username = request.POST['username']
             password = request.POST['password']
@@ -46,8 +47,9 @@ class Auth:
             }
         return render(request, 'register/login_page.html', context)
             
-    
     @staticmethod
     def logout_user(request):
-        logout(request)
+        if request.user.is_authenticated:
+            logout(request)
+            return redirect('join_chat')
         return redirect('join_chat')

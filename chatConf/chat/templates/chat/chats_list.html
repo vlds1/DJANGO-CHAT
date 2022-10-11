@@ -9,7 +9,7 @@
     <div class="main_page">
         <div class="logout">
             <a href="{% url 'logout' %}">
-                <img src="{% static 'chat/img/logout.png' %}" alt="">
+                <img src="{% static 'chat/img/logout.png' %}" alt="">Выйти
             </a>
         </div>
         <div class="main_page_inner">
@@ -73,6 +73,7 @@
             }
         }
         
+        // create html element of chat room
         function CraeteChat(chat_name, id){
             let li = document.createElement('li')
             let a = document.createElement('a')
@@ -93,7 +94,6 @@
             document.getElementById(id).prepend(btn)
             document.getElementById(id).prepend(a)
         }
-
 
         // send data to we consumer to create a chat room
         document.querySelector('#add_chat').onkeyup = function(e){
@@ -118,11 +118,13 @@
         }
 
         // send id of chat room to detele it by id
-        function chat_to_delete (e){
+        function chat_to_delete(e){
+            console.log('delete')
             chat = e.path[0]
             chatsListSocket.send(JSON.stringify({
                 'command': 'delete_chat_room',
-                'chat_to_delete': chat.id
+                'chat_to_delete': chat.id,
+                'user': user
             }))
         }
     </script>

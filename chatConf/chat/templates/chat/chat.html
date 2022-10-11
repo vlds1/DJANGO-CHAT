@@ -37,11 +37,15 @@
         </div>
     </div>
     {{chat_name|json_script:"chat_name"}}
+    {{user|json_script:'user'}}
 
     <script>
         const chat_name = JSON.parse(
             document.getElementById('chat_name').textContent
-            )
+        )
+        const user = JSON.parse(
+            document.getElementById('user').textContent
+        )
 
         var chatSocket = new WebSocket(
             'ws://'
@@ -67,17 +71,16 @@
                 document.querySelector("#send_message_btn").click()
             }
         }
+        
         document.querySelector('#send_message_btn').onclick = function(e){
             const data = document.querySelector('#message')
             const message = data.value
             chatSocket.send(JSON.stringify({
-                'message': message
+                'message': message,
+                'user': user
             }))
             data.value = ''
             document.querySelector('#message').focus()
         }
-
-
-        
     </script>
 {% endblock  %}

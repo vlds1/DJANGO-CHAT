@@ -1,8 +1,9 @@
 .main_page{
-    position: relative;
-
     height: 100vh;
     width: 100vw;
+
+    position: relative;
+
     display: flex;
     justify-content: space-around;
 }
@@ -12,81 +13,92 @@
     right: 2rem; 
 }
 .logout > a{
+    height: 2rem;
+    width: 4.7rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     text-decoration: none;
     color: black;
 }
 .main_page_inner{
     width: 40%;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 }
 .chat_actions{
     width: 100%;
+
     border-bottom: 1px solid #d7d8dd;
     padding-bottom: 1rem;
 }
 .chat_action{
+    width: 100%;
+
     display: flex;
     justify-content: space-between;
+
     margin-top: 1rem;
-    width: 100%;
 }
 .chat_action_inp{
     height: 2rem;
     width: 89%;
+
     padding: 0 .5rem;
     font-size: 16px;
     border: none;
-    box-shadow: 0 0 5px#e2e3e7;
-    border: 1px solid gray;
+    box-shadow: 0 0 0 .5px #dce1e6;
     border-radius: 5px;
     outline: none;
 }
 .chat_action_btn{
     height: 2rem;
     width: 9%;
+
     cursor: pointer;
     font-size: 24px;
     color: #3a3a3a;
     background-color: white;
     border: none;
-    box-shadow: 0 0 5px#e2e3e7;
-    border: 1px solid gray;
+    box-shadow: 0 0 0 .5px #dce1e6;
     border-radius: 5px;
 }
 .chats{
     width: 100%;
     margin-top: 1rem;
+
     display: flex;
     flex-direction: column;
     justify-content: start;
 }
 .chat{
-    display: flex;
-    flex-direction: row;
-
-    
     height: 3rem;
     margin-bottom: 1rem;
+
+    display: flex;
+    flex-direction: row;
     font-size: 24px;
     overflow: hidden;
-    box-shadow: 0 0 5px#e2e3e7;
-    border: 1px solid gray;
+    background-color: white;
+    box-shadow: 0 0 0 0.5px #dce1e6;
     border-radius: 5px;
     transition: .5s;
 }
 .chat_name{
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: black;
-
     height: 100%;
     width: 90%;
-    padding-left: 15px;
 
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+    color: black;
+    background-color: #fffefd;
+    padding-left: 15px;
     transition: .5s;
 }
 .chat_name:hover{
@@ -94,8 +106,9 @@
     padding-left: 35px;
 }
 .delete_room_btn{
-    cursor: pointer;
     width: 10%;
+    
+    cursor: pointer;
     background: none;
     border: none;
     transition: .5s;
