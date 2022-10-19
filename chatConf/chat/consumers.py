@@ -75,19 +75,11 @@ class ChatRoom(WebsocketConsumer):
             self.chat_group_name,
             self.channel_name   
         )
+        self.accept()
 
         chat_room = ChatRoomModel.objects.get(chat_room_name=self.chat_name)
         messages = get_chat_room_messages(chat_room.id)
-        for message in messages:
-            async_to_sync(self.channel_layer.group_send)(
-                self.chat_group_name,
-                {
-                    'type': 'chat_message',
-                    'message': message['text'],
-                    'user': message['sender_id']
-                }
-            )
-        self.accept()
+        self.send(json.dumps({'messages': messages, 'command': 'get_last_messages'}))
         
     def disconnect(self, code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -110,7 +102,8 @@ class ChatRoom(WebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': new_message.text,
-                'user': int(new_message.sender_id)
+                'message_id': new_message.id,
+                'user': int(new_message.sender_id),
             }
         )
         
@@ -119,5 +112,6 @@ class ChatRoom(WebsocketConsumer):
         user = User.objects.get(id=event['user'])
         self.send(text_data=json.dumps({
             'message': message,
-            'user': user.username
+            'user': user.username,
+            'message_id': str(event['message_id'])
         }))

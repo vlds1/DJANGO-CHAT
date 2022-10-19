@@ -14,7 +14,7 @@
 }
 .logout > a{
     height: 2rem;
-    width: 4.7rem;
+    width: 5.5rem;
 
     display: flex;
     justify-content: space-between;
@@ -33,7 +33,7 @@
 .chat_actions{
     width: 100%;
 
-    border-bottom: 1px solid #d7d8dd;
+    border-bottom: 1px solid gray;
     padding-bottom: 1rem;
 }
 .chat_action{
@@ -45,27 +45,27 @@
     margin-top: 1rem;
 }
 .chat_action_inp{
-    height: 2rem;
-    width: 89%;
+    height: 3rem;
+    width: 90%;
 
     padding: 0 .5rem;
     font-size: 16px;
     border: none;
-    box-shadow: 0 0 0 .5px #dce1e6;
-    border-radius: 5px;
+    border: 2px solid black;
+    border-right: 1px solid black;
     outline: none;
 }
 .chat_action_btn{
-    height: 2rem;
-    width: 9%;
+    height: 3rem;
+    width: 10%;
 
     cursor: pointer;
     font-size: 24px;
-    color: #3a3a3a;
     background-color: white;
     border: none;
-    box-shadow: 0 0 0 .5px #dce1e6;
-    border-radius: 5px;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
 }
 .chats{
     width: 100%;
@@ -76,6 +76,7 @@
     justify-content: start;
 }
 .chat{
+    position: relative;
     height: 3rem;
     margin-bottom: 1rem;
 
@@ -83,10 +84,22 @@
     flex-direction: row;
     font-size: 24px;
     overflow: hidden;
-    background-color: white;
-    box-shadow: 0 0 0 0.5px #dce1e6;
-    border-radius: 5px;
+    /* background-color: white; */
+    /* box-shadow: 0 0 0 0.5px #dce1e6; */
+    /* border-radius: 5px; */
+    border-bottom: 2px solid black;
+    /* border-right: 2px solid black;
+    border-radius: 0 0 5px 0; */
     transition: .5s;
+}
+.chat::before{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    content: '';
+    height: 10px;
+    width: 10px;
+    background-color: black;
 }
 .chat_name{
     height: 100%;
@@ -97,20 +110,22 @@
 
     text-decoration: none;
     color: black;
-    background-color: #fffefd;
-    padding-left: 15px;
+    padding-left: 2rem;
     transition: .5s;
 }
 .chat_name:hover{
     overflow: hidden;
-    padding-left: 35px;
+    padding-left: 4rem;
 }
 .delete_room_btn{
     width: 10%;
-    
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
     background: none;
     border: none;
+    /* border-top: 1px solid black;
+    border-left: 1px solid black; */
     transition: .5s;
 }
 .delete_room_btn:hover{

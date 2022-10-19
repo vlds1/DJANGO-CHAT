@@ -14,11 +14,8 @@
                     {{chat_name}}
                 </div>
             </div>
-            <textarea
-                id="chat_messages" 
-                class="chat_messages"  
-                disabled
-            ></textarea>
+            <div id="chat_messages" class="chat_messages">
+            </div>
             <div class="send_message">
                 <input 
                     class="send_message_inp" 
@@ -38,6 +35,7 @@
     </div>
     {{chat_name|json_script:"chat_name"}}
     {{user|json_script:'user'}}
+    {{user_name|json_script:'user_name'}}
 
     <script>
         const chat_name = JSON.parse(
@@ -45,6 +43,9 @@
         )
         const user = JSON.parse(
             document.getElementById('user').textContent
+        )
+        const username = JSON.parse(
+            document.getElementById('user_name').textContent
         )
 
         var chatSocket = new WebSocket(
@@ -57,14 +58,27 @@
 
         chatSocket.onmessage = function(e){
             const data = JSON.parse(e.data)
+            messages = data['messages']
             console.log(data)
-            document.querySelector('#chat_messages').value += 
-                data['user'] 
-                + ': '
-                + data['message'] 
-                + '\n'
+            if(data['command'] == 'get_last_messages'){
+                for(i=0; i<messages.length; i++){
+                    createMessageEl(
+                    message=messages[i].text, 
+                    userName=messages[i].sender_id, 
+                    message_id=messages[i].id
+                    )
+                }
+            }else{
+                createMessageEl(
+                    message=data.message, 
+                    userName=data.user, 
+                    message_id=data.message_id
+                    )
+            }
+            
         }
 
+        //отправка сообщений
         document.querySelector('#message').focus()
         document.querySelector('#message').onkeyup = function(e){
             if(e.keyCode === 13){
@@ -75,12 +89,49 @@
         document.querySelector('#send_message_btn').onclick = function(e){
             const data = document.querySelector('#message')
             const message = data.value
-            chatSocket.send(JSON.stringify({
-                'message': message,
-                'user': user
-            }))
+            if(message !== ''){
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'user': user
+                }))
+            }
             data.value = ''
             document.querySelector('#message').focus()
+        }
+
+        
+        //создание блока сообщения
+        function createMessageEl(message, userName, message_id){
+            let messageElement = document.createElement('div')
+            let messageElementInner = document.createElement('div')
+            let participant = document.createElement('div')
+            let message_text = document.createElement('div')
+
+            if(userName == username){
+                messageElement.className = 'owner_message' 
+            }else{
+                messageElement.className = 'participant_message' 
+            }
+            if(userName == username){
+                messageElementInner.className = 'owner_message_inner'
+            }else{
+                messageElementInner.className = 'participant_message_inner'
+            }
+            messageElement.id = message_id 
+            if(userName == username){
+                participant.innerHTML='You: '
+            }else{
+                participant.innerHTML= userName + ': '
+            }
+            participant.className = 'message_user' 
+            message_text.innerHTML=message
+            message_text.className = 'message_text' 
+
+            document.querySelector('#chat_messages').prepend(messageElement)
+            document.getElementById(message_id).prepend(messageElementInner)
+            chield = document.getElementById(message_id).firstChild
+            chield.prepend(message_text)
+            chield.prepend(participant)
         }
     </script>
 {% endblock  %}

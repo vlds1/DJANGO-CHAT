@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import ChatRoomModel, ChatRoomMessage
+from django.contrib.auth.models import User
 
 # Create your views here.
 def joinPage(request):
@@ -17,7 +18,8 @@ def mainPage(request):
 def getChat(request, chat_name):
     context = {
         'chat_name': chat_name,
-        'user': request.user.id
+        'user': request.user.id,
+        'user_name': request.user.username
     }
     return render(request, 'chat/chat.html', context)
 
@@ -30,7 +32,13 @@ def get_all_chat_rooms(user):
 
 def get_chat_room_messages(chat_room_id):
     messages_set = ChatRoomMessage.objects.values(
-        'text', 'sender_id'
+        'text', 'sender_id', 'id'
         ).filter(room_chat_id=chat_room_id)
-    messages = [message for message in messages_set]
+
+    messages = []
+    for message in messages_set:
+        user = User.objects.get(id=message['sender_id'])
+        message['sender_id'] = user.username
+        messages.append(message)
+        
     return messages
