@@ -1,0 +1,26 @@
+{% extends 'contacts/contacts.html' %}
+{% load static %}
+
+{% block contacts %}
+<div class="contacts_page_content">
+    <ul class="users_list">
+        {% for user in users_contact %}
+            <li class="user">
+                <div class="user_name">
+                    {{user}}
+                </div>
+                <div class="user_action">
+                    <a href="{% url 'get_private_chat' user.user_id %}">
+                        <img src="{% static 'contacts/img/chat.png' %}" alt="">
+                    </a>
+                </div>
+                <div class="user_action">
+                    <a href="{% url 'delete_contact' user.user_id %}">
+                        -
+                    </a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

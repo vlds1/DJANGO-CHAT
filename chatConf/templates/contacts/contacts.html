@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'contacts/css/contacts.css' %}">
+{% endblock%}
+
+{% block content %}
+<div class="contacts_page">    
+        {% block contacts %}
+        {% endblock %}
+</div>
+{% endblock%}

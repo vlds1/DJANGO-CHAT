@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="sidebar">
+    <div class="sidebar_user">
+        <div class="username">
+            {{user_name}}
+        </div>
+        <div>
+            <a href="{% url 'logout' %}">
+                <img class="logout" src="{% static 'chat/img/logout.svg' %}" alt="">
+            </a>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="sidebar_action">
+            <a href="{% url 'chats_list' %}">
+                Chat rooms
+            </a>
+        </div>
+        <div class="sidebar_action">
+            <a href="{% url 'contacts' %}">
+                Chats
+            </a>
+        </div>
+        <div class="sidebar_action">
+            <a href="{% url 'all_users' %}">
+                All peoples
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+.contacts_page{
+    height: 100vh;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.contacts_page_inner_content{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+}
+.contacts_page_option{
+    cursor: pointer;
+    margin: 2rem;
+    display: inline-block;
+}
+.contacts_page_option > a{
+    text-decoration: none;
+    color: black;
+}
+.contacts_page_content{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 3rem 0;
+}
+.users_list{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+.user{
+    position: relative;
+    margin-bottom: 1rem;
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    font-size: 24px;
+    overflow: hidden;
+    border: 1px solid black;
+    border-radius: 1rem;
+    transition: .5s;
+}
+.user::before{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    content: '';
+    height: 10px;
+    width: 10px;
+    /* background-color: black; */
+}
+.user_name{
+    padding-left: 2rem;
+    width: 90%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.user_action{
+    width: 7%;
+    height: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: .5s;
+}
+.user_action > a{
+    text-decoration: none;
+    color: black;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user_action > a > img{
+    height: 18px;
+}

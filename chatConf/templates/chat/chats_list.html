@@ -1,0 +1,129 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static '/chat/css/chats_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main_page">
+        
+        <div class="main_page_inner">
+            <div class="main_page_inner_content">
+                <div class="chat_actions">
+                    <div class="chat_action">
+                        <input
+                            type="text" 
+                            id="add_chat"  
+                            class="chat_action_inp" 
+                            placeholder="Add chat (enter chat name)"
+                        >
+                        <button
+                            id="add_chat_btn" 
+                            class="chat_action_btn"
+                            >
+                            +
+                        </button>
+                    </div>
+                </div>
+                <div class="chats">
+                    <ul id="chats">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{user|json_script:"user"}}
+
+    <script>
+
+        const user = JSON.parse(
+            document.getElementById('user').textContent
+        )
+
+        const chatsListSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/list/'
+        )
+
+        // this function is triggered when a data from ws is received
+        chatsListSocket.onmessage = function(e){
+            const data = JSON.parse(e.data)
+            const chats = data['chats']
+            if(data['command'] == 'get_all_chats'){
+                for(i=0; i<chats.length; i++){
+                    CraeteChat(
+                        chat_name = chats[i].chat_room_name, 
+                        id=chats[i].id
+                        )
+                }
+            }
+            if(data['command'] == 'create_new_chat'){
+                CraeteChat(
+                        chat_name = chats.chat_room_name, 
+                        id=chats.id
+                        )
+            }
+            if(data['command'] == 'deleted'){
+                const chat_room = document.getElementById(`${data['id']}`)
+                chat_room.remove()
+            }
+        }
+        
+        // create html element of chat room
+        function CraeteChat(chat_name, id){
+            let li = document.createElement('li')
+            let a = document.createElement('a')
+            let btn = document.createElement('button')
+
+            li.className="chat"
+            li.id = id
+            a.className = 'chat_name'
+            a.innerHTML = chat_name
+            a.id = chat_name
+            a.href = chat_name + '/'
+            btn.id = id
+            btn.innerHTML = 'x'
+            btn.className = 'delete_room_btn'
+            btn.addEventListener('click', chat_to_delete)
+
+            document.querySelector('#chats').prepend(li)
+            document.getElementById(id).prepend(btn)
+            document.getElementById(id).prepend(a)
+        }
+
+        // send data to we consumer to create a chat room
+        document.querySelector('#add_chat').onkeyup = function(e){
+            if(e.keyCode === 13){
+                document.querySelector('#add_chat_btn').click()
+            }
+        }
+
+        document.querySelector('#add_chat_btn').onclick = function(e){
+            const addChatInput = document.querySelector('#add_chat')
+            const chat_name = addChatInput.value
+            if(chat_name == ''){
+                alert('Room name cant be empty string')
+            }else{
+                chatsListSocket.send(JSON.stringify({
+                    'command': 'create_chat_room',
+                    'chat_name': chat_name,
+                    'user': user
+                }))
+                addChatInput.value = ''
+            }
+        }
+
+        // send id of chat room to detele it by id
+        function chat_to_delete(e){
+            console.log('delete')
+            chat = e.path[0]
+            chatsListSocket.send(JSON.stringify({
+                'command': 'delete_chat_room',
+                'chat_to_delete': chat.id,
+                'user': user
+            }))
+        }
+    </script>
+{% endblock  %}
