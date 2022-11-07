@@ -21,6 +21,8 @@
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
+    box-shadow: 0 0 5px #acc2cb;
+    border-radius: 1rem;
 }
 .chat_action_inp{
     height: 3rem;
@@ -29,9 +31,9 @@
     font-size: 16px;
     border-right: 0px;
     outline: none;
-    border: 1px solid gray;
+    border: none;
     border-radius: 1rem 0 0 1rem;
-    border-right: none;
+    background-color: #edf1f3;
 }
 .chat_action_btn{
     height: 3rem;
@@ -39,9 +41,8 @@
     color: gray;
     cursor: pointer;
     font-size: 24px;
-    background-color: white;
-    border: 1px solid gray;
-    border-left: none;
+    background-color: #edf1f3;
+    border: none;
     border-radius: 0 1rem 1rem 0;
 }
 .chats{
@@ -60,9 +61,10 @@
     flex-direction: row;
     font-size: 24px;
     overflow: hidden;
-    border: 1px solid black;
+    box-shadow: 0 0 3px #acc2cb;
     transition: .5s;
     border-radius: 1rem;
+    background-color: #fff;
 }
 .chat::before{
     position: absolute;
@@ -71,7 +73,6 @@
     content: '';
     height: 10px;
     width: 10px;
-    /* background-color: black; */
 }
 .chat_name{
     height: 100%;
@@ -96,7 +97,7 @@
     cursor: pointer;
     background: none;
     border: none;
-    transition: .5s;
+    transition: .3s;
 }
 .delete_room_btn:hover{
     font-size: 24px;

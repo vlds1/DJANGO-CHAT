@@ -53,8 +53,11 @@ def getPrivateChat(request, contacts_user):
         )
         private_chat.save()
     
+    friend = private_chat.chat_room_name.replace('_', '')
+    friend = friend.replace(request.user.username, '')
     context = {
         "chat_name": private_chat.chat_room_name,
+        "friend": friend,
         "user": request.user.id,
         "user_name": request.user.username,
         "chat_type": 'private'

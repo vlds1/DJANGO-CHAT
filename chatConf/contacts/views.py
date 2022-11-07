@@ -25,7 +25,7 @@ class ContactView:
     #get all users
     @staticmethod
     def get_all_users(request):
-        users = User.objects.all()
+        users = User.objects.values('id', 'username').all().order_by('-username')
 
         context = {
             "user": request.user.id,
@@ -51,6 +51,4 @@ class ContactView:
         contact_list = ContactsList.objects.get(user_id=request.user.id)
         contact = User.objects.get(id=id)
         contact_list.contacts.remove(contact)
-        # ContactsList.objects.raw(f'DELETE FROM user_contacts_list_contacts \
-        #     WHERE id={id};')
         return redirect('contacts')

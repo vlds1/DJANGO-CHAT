@@ -4,8 +4,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* border-right: 1px solid black; */
-    background-color: #f9f9f9;
+    background-color: #fff;
+    box-shadow: 0 0 3px #acc2cb;
 }
 .sidebar_user{
     display: flex;
@@ -15,7 +15,7 @@
 }
 .username{
     font-size: 1.5rem;
-    color: gray;
+    color: #000000;
 }
 .logout{
     filter: invert(0) sepia(106%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(0);
@@ -29,7 +29,5 @@
     align-items: center;
     padding: 0.3rem 1rem;
     text-decoration: none;
-    color: grey;
-    /* border: 1px solid gray; */
-    /* border-radius: .7rem; */
+    color: #000000;
 }

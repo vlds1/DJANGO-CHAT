@@ -4,16 +4,18 @@
 <div class="contacts_page_content">
     <ul class="users_list">
         {% for user in users %}
-            <li class="user">
-                <div class="user_name">
-                    {{user}}
-                </div>
-                <div class="user_action">
-                    <a href="{% url 'add_contact' user.id %}">
-                        +
-                    </a>
-                </div>
-            </li>
+            {% if user.username != user_name %}
+                <li class="user">
+                    <div class="user_name">
+                        {{user.username}}
+                    </div>
+                    <div class="user_action">
+                        <a href="{% url 'add_contact' user.id %}">
+                            +
+                        </a>
+                    </div>
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
 </div>
