@@ -24,8 +24,7 @@
     text-align: center;
     color: black;
     margin: 1rem 0;
-    padding-bottom: 7px;
-    font-size: 30px;
+    font-size: 28px;
 }
 .chat_messages{
     width: 100%;
@@ -33,9 +32,8 @@
     padding: .5rem;
     background-color: white;
     border: 2px solid black;
-    /* border-bottom: 2px solid black; */
-    border-radius: 1rem 1rem 0 0 ;
-    overflow: auto;
+    border-radius: 1rem 1rem 0 0;
+    overflow: hidden;
 }
 .chat_messages::-webkit-scrollbar {
     width: 3px;               
@@ -118,4 +116,22 @@
 }
 .message_text{
     color: #505050;
+}
+/* Delete message BTN */
+.delete_message{
+    position: absolute;
+    cursor: pointer;
+    top: .6rem;
+    right: .3rem;
+    border: none;
+    line-height: 0;
+    font-size: 16px;
+    opacity: 0;
+    transition: .2s;
+}
+.participant_message_inner:hover > .delete_message{
+    opacity: 1;
+}
+.owner_message_inner:hover > .delete_message{
+    opacity: 1;
 }

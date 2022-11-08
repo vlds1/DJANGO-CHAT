@@ -5,14 +5,14 @@
 <head>
     <meta charset="utf-8"/>
     <title>Chat Rooms</title>
-    <link rel="stylesheet" href="{% static '/chat/css/index.css' %}">
-    <link rel="stylesheet" href="{% static '/chat/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="{% static 'sidebar.css' %}">
     {% block css %}{% endblock  %}
 </head>
 <body>
     <div class="app">
         {% if request.user.username %}
-            {% include 'chat/sidebar.html' %}
+            {% include 'sidebar.html' %}
         {% endif %}
         {% block content %}
         {% endblock %}

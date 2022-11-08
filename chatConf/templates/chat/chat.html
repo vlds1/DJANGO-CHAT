@@ -64,6 +64,20 @@
 
         chatSocket.onmessage = function(e){
             const data = JSON.parse(e.data)
+            console.log(data['command'])
+            if(data['command'] == 'delete_message'){
+                console.log(data)
+                let messageElToDelete = document.getElementById(`${data.deleted_messaeg_id}`)
+                messageElToDelete.remove()
+                //console.log(messageElToDelete)
+            }  
+            else{
+                console.log('creating')
+                createMessage(data)
+            }
+        }
+
+        function createMessage(data){
             messages = data['messages']
             if(data['command'] == 'get_last_messages'){
                 for(i=0; i<messages.length; i++){
@@ -84,7 +98,7 @@
             chat.scrollTop = chat.scrollHeight
         }
 
-        //отправка сообщений
+        //отправка сообщения
         document.querySelector('#message').focus()
         document.querySelector('#message').onkeyup = function(e){
             if(e.keyCode === 13){
@@ -97,6 +111,7 @@
             const message = data.value
             if(message !== ''){
                 chatSocket.send(JSON.stringify({
+                    'command': 'create_message',
                     'message': message,
                     'user': user
                 }))
@@ -111,33 +126,39 @@
             let messageElementInner = document.createElement('div')
             let participant = document.createElement('div')
             let message_text = document.createElement('div')
+            let deleteMessage = document.createElement('button')
 
-            if(userName == username){
-                messageElement.className = 'owner_message' 
-            }else{
-                messageElement.className = 'participant_message' 
-            }
-            if(userName == username){
-                messageElementInner.className = 'owner_message_inner'
-            }else{
-                messageElementInner.className = 'participant_message_inner'
-            }
+            messageElement.className = 
+                userName == username ? 'owner_message' : 'participant_message'
+            messageElementInner.className = 
+                userName == username ? 'owner_message_inner' : 'participant_message_inner'
             messageElement.id = message_id 
-            if(userName == username){
-                participant.innerHTML='You'
-            }else{
-                participant.innerHTML= userName
-            }
+            messageElement.name = 'message' 
+            participant.innerHTML = userName == username ? 'You' : userName
             participant.className = 'message_user' 
             message_text.innerHTML=message
             message_text.className = 'message_text' 
+            deleteMessage.innerHTML = 'x'
+            deleteMessage.className = 'delete_message'
+            deleteMessage.id = message_id
+            deleteMessage.addEventListener('click', messageToDelete)
 
             document.querySelector('#chat_messages').append(messageElement)
             document.getElementById(message_id).prepend(messageElementInner)
             chield = document.getElementById(message_id).firstChild
             chield.prepend(message_text)
             chield.prepend(participant)
-            
+            chield.prepend(deleteMessage)
+        }
+
+        //удаление сообщения
+        function messageToDelete(e){
+            messageToDelete = e.path[0]
+            chatSocket.send(JSON.stringify({
+                'command': 'delete_message',
+                'message_id': messageToDelete.id,
+                'chat_type': chat_type
+            }))
         }
     </script>
 {% endblock  %}

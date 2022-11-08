@@ -65,47 +65,20 @@ class ChatsListConsumer(WebsocketConsumer):
 class ChatRoom(WebsocketConsumer):
     """Consumer for a general chat room"""
 
-    def connect(self):
-        self.chat_name = self.scope["url_route"]["kwargs"]["room_name"]
-        self.chat_group_name = "chat_%s" % self.chat_name
-        self.user = self.scope["user"]
-        self.chat_type = self.scope["url_route"]["kwargs"]["chat_type"]
-        async_to_sync(self.channel_layer.group_add)(
-            self.chat_group_name, self.channel_name
-        )
-        self.accept()
-
-        if self.chat_type == 'public':
-            chat_room = ChatRoomModel.objects.get(chat_room_name=self.chat_name)
-            messages = get_chat_room_messages(chat_room.id)
-            self.send(json.dumps({"messages": messages, "command": "get_last_messages"}))
-        else:
-            private_chat = PrivateChat.objects.get(chat_room_name=self.chat_name)
-            messages = get_private_chat_messages(private_chat.id)
-            self.send(json.dumps({"messages": messages, "command": "get_last_messages"}))
-
-    def disconnect(self, code):
-        async_to_sync(self.channel_layer.group_discard)(
-            self.chat_group_name, self.channel_name
-        )
-
-    def receive(self, text_data):
-        data = json.loads(text_data)
-        
+    def create_and_send_message(self, data):
         if self.chat_type == 'public':
             new_message = ChatRoomMessage.objects.create(
                 room_chat=ChatRoom.objects.get(chat_room_name=self.chat_name),
                 sender=User.objects.get(id=data["user"]),
                 text=data["message"],
             )
-            new_message.save()
         else:
             new_message = PrivateChatMessage.objects.create(
                 room_chat=PrivateChat.objects.get(chat_room_name=self.chat_name),
                 sender=User.objects.get(id=data["user"]),
                 text=data["message"],
             )
-            new_message.save()
+        new_message.save()
 
         async_to_sync(self.channel_layer.group_send)(
             self.chat_group_name,
@@ -122,11 +95,76 @@ class ChatRoom(WebsocketConsumer):
         user = User.objects.get(id=event["user"])
         self.send(
             text_data=json.dumps(
-                {
+                {   
+                    "command": "create_message",
                     "message": message,
                     "user": user.username,
                     "message_id": str(event["message_id"]),
                 }
             )
         )
+
+    def delete_message(self, data):
+        if data['chat_type'] == 'private':
+            message_to_delete = PrivateChatMessage.objects.get(id=data['message_id'])
+            message_to_delete.delete()
+            async_to_sync(self.channel_layer.group_send)(
+                self.chat_group_name,
+                {   
+                    'type': 'deleted_message',
+                    'deleted_message_id': data['message_id']
+                }
+            )
+        else:
+            print('public')
+
+    def deleted_message(self, event):
+        deleted_messaeg_id = event['deleted_message_id']
+        self.send(
+            text_data = json.dumps(
+                {
+                    'command': 'delete_message',
+                    'deleted_messaeg_id': str(deleted_messaeg_id)
+                }
+            )
+        )
+
+
+    commands = {
+        'delete_message': delete_message,
+        'create_message': create_and_send_message,
+    }
+
+    def connect(self):
+        self.chat_name = self.scope["url_route"]["kwargs"]["room_name"]
+        self.chat_group_name = "chat_%s" % self.chat_name
+        self.user = self.scope["user"]
+        self.chat_type = self.scope["url_route"]["kwargs"]["chat_type"]
+        async_to_sync(self.channel_layer.group_add)(
+            self.chat_group_name, self.channel_name
+        )
+        self.accept()
+
+        if self.chat_type == 'public':
+            chat_room = ChatRoomModel.objects.get(chat_room_name=self.chat_name)
+            messages = get_chat_room_messages(chat_room.id)
+        else:
+            private_chat = PrivateChat.objects.get(chat_room_name=self.chat_name)
+            messages = get_private_chat_messages(private_chat.id)
+        
+        self.send(json.dumps({
+                "messages": messages, 
+                "command": "get_last_messages"
+            })
+        )
+
+    def disconnect(self, code):
+        async_to_sync(self.channel_layer.group_discard)(
+            self.chat_group_name, self.channel_name
+        )
+
+    def receive(self, text_data):
+        data = json.loads(text_data)
+        self.commands[data['command']](self, data)
+
 

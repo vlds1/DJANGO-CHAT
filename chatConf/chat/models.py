@@ -50,6 +50,7 @@ class ChatRoomMessage(models.Model):
 
 class PrivateChat(models.Model):
     """Privat chat room for 2 peoples"""
+    
     chat_room_name = models.CharField('Room name', max_length=120, unique=True)
     user1 = models.ForeignKey(
         User, verbose_name='Chat owner',

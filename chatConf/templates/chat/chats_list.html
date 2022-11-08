@@ -115,9 +115,8 @@
             }
         }
 
-        // send id of chat room to detele it by id
+        // send id of chat room to detele by id
         function chat_to_delete(e){
-            console.log('delete')
             chat = e.path[0]
             chatsListSocket.send(JSON.stringify({
                 'command': 'delete_chat_room',
