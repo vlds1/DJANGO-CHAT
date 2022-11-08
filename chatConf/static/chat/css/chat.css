@@ -31,7 +31,8 @@
     height: 65%;
     padding: .5rem;
     background-color: white;
-    border: 2px solid black;
+    /* border: 2px solid black; */
+    box-shadow: 0 0 3px #acc2cb;
     border-radius: 1rem 1rem 0 0;
     overflow: hidden;
 }
@@ -47,6 +48,8 @@
 .send_message{
     display: flex;
     justify-content: space-between;
+    box-shadow: 0 0 3px #acc2cb;
+    border-radius: 0 0 1rem 1rem;
 }
 .send_message_inp{
     height: 4rem;
@@ -55,8 +58,8 @@
     font-size: 14px;
     background-color: white;
     border: none;
-    border-bottom: 2px solid black;
-    border-left: 2px solid black;
+    /* border-bottom: 2px solid black; */
+    /* border-left: 2px solid black; */
     border-radius: 0 0 0 1rem;
     outline: none;
     resize: none;
@@ -64,12 +67,11 @@
 .send_message_btn{
     height: 4rem;
     width: 10%;
-
-    color: black;
+    color: #7a8ebb;
     font-size: 28px;
     border: none;
-    border-right: 2px solid black;
-    border-bottom: 2px solid black;
+    /* border-right: 2px solid black; */
+    /* border-bottom: 2px solid black; */
     border-radius: 0 0 1rem 0;
     background-color: white;
 }
@@ -88,7 +90,7 @@
     position: relative;
     padding: .2rem 1rem;
     width: 45%;
-    border: 1px solid gray;
+    border: 1px solid #ced3df;
     background-color: #f1f3f7;
     border-radius: 5px;
 }
@@ -106,16 +108,17 @@
     position: relative;
     padding: .2rem 1rem;
     width: 100%;
-    border: 1px solid gray;
+    border: 1px solid #ced3df;
     background-color: #f1f3f7;
     border-radius: 5px;
 }
 .message_user{
     font-size: 12px;
     font-weight: bold;
+    /* color: gray; */
 }
 .message_text{
-    color: #505050;
+    color: #686868;
 }
 /* Delete message BTN */
 .delete_message{
@@ -126,6 +129,7 @@
     border: none;
     line-height: 0;
     font-size: 16px;
+    color: #374d87;
     opacity: 0;
     transition: .2s;
 }

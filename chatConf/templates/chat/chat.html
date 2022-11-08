@@ -136,7 +136,7 @@
             messageElement.name = 'message' 
             participant.innerHTML = userName == username ? 'You' : userName
             participant.className = 'message_user' 
-            message_text.innerHTML=message
+            message_text.innerHTML = message
             message_text.className = 'message_text' 
             deleteMessage.innerHTML = 'x'
             deleteMessage.className = 'delete_message'
@@ -148,12 +148,14 @@
             chield = document.getElementById(message_id).firstChild
             chield.prepend(message_text)
             chield.prepend(participant)
-            chield.prepend(deleteMessage)
+            if(userName == username){
+                chield.prepend(deleteMessage)
+            }
         }
 
         //удаление сообщения
         function messageToDelete(e){
-            messageToDelete = e.path[0]
+            messageToDelete = e.target
             chatSocket.send(JSON.stringify({
                 'command': 'delete_message',
                 'message_id': messageToDelete.id,

@@ -10,7 +10,8 @@
 .auth_page_inner{
     padding: 1rem;
     width: 500px;
-    border: 2px solid black;
+    background-color: #fff;
+    box-shadow: 0 0 3px #e6eaf3;
     border-radius: 1rem;
 }
 .auth_page_inner > form{
@@ -22,8 +23,8 @@
 .auth_page_inner > form > p{
     display: flex;
     flex-direction: column;
-    margin-top: 1rem;
     width: 100%;
+    margin-top: 1rem;
 }
 .title{
     font-size: 24px;
@@ -35,8 +36,7 @@
     padding: 0 .5rem;
     font-size: 16px;
     border: none;
-    box-shadow: 0 0 5px#e2e3e7;
-    border: 1px solid black;
+    background-color: #e6eaf3;
     border-radius: .7rem;
     outline: none;
     
@@ -46,14 +46,13 @@
 }
 .auth_btn{
     width: 6rem;
-    margin: 1rem 0 .5rem 0;
-    padding: .3rem 1rem;
+    margin: 2rem 0 .5rem 0;
+    padding: .5rem 1rem;
     cursor: pointer;
     font-size: 16px;
-    background-color: white;
+    color: #0e2d75;
+    background-color: #e6eaf3;
     border: none;
-    box-shadow: 0 0 5px#e2e3e7;
-    border: 1px solid black;
     border-radius: .7rem;
 }
 .account > a{
