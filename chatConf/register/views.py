@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
+from .services import authenticate_service
 from .forms import *
 
 # Create your views here.
@@ -18,9 +19,8 @@ class Auth:
                 return redirect('login_page')
             
         form = UserRegisterForm()
-        context = {
-            'form': form
-            }
+        context = { 'form': form }
+
         return render(request, 'register/register_page.html', context)
     
     @staticmethod
@@ -29,22 +29,14 @@ class Auth:
             return redirect('chats_list')
 
         if request.method == 'POST':
-            username = request.POST['username']
-            password = request.POST['password']
-            print(username, password)
-            user = authenticate(
-                request, 
-                username=username, 
-                password=password
-            )
+            user = authenticate_service(request, data = request.POST)
             if user is not None:
                 login(request, user)
                 return redirect('chats_list')
             
         form = UserLoginForm()
-        context = {
-            'form': form
-            }
+        context = { 'form': form }
+
         return render(request, 'register/login_page.html', context)
             
     @staticmethod

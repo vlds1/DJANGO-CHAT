@@ -11,7 +11,11 @@
             <div class="chat_header">
                 <a class="back" href="javascript:history.back();"><</a>
                 <div class="title">
-                    {{friend}}
+                    {% if friend != None %}
+                        {{friend}}
+                    {% else %}
+                        {{chat_name}}
+                    {% endif %}
                 </div>
             </div>
             <div id="chat_messages" class="chat_messages">
@@ -64,15 +68,11 @@
 
         chatSocket.onmessage = function(e){
             const data = JSON.parse(e.data)
-            console.log(data['command'])
             if(data['command'] == 'delete_message'){
-                console.log(data)
                 let messageElToDelete = document.getElementById(`${data.deleted_messaeg_id}`)
                 messageElToDelete.remove()
-                //console.log(messageElToDelete)
             }  
             else{
-                console.log('creating')
                 createMessage(data)
             }
         }

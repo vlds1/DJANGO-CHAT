@@ -7,7 +7,7 @@
             {% if user.username != user_name %}
                 <li class="user">
                     <div class="user_name">
-                        {{user.username}}
+                        <a href="{% url 'add_contact' user.id %}">{{user.username}}</a>
                     </div>
                     <div class="user_action">
                         <a href="{% url 'add_contact' user.id %}">

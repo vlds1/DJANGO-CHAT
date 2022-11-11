@@ -14,8 +14,9 @@
     margin: 1rem 1rem 5rem;
 }
 .username{
+    cursor: default;
     font-size: 1.5rem;
-    color: #000000;
+    color: #1a2338d1;
 }
 .logout{
     filter: invert(0) sepia(106%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(0);
@@ -27,7 +28,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 18px;
     padding: 0.3rem 1rem;
     text-decoration: none;
-    color: #000000;
+    color: #1a2338b6;
+    transition: .2s;
+}
+.sidebar_action > a:hover{
+    font-weight: bold;
+    color: #02143d;
 }

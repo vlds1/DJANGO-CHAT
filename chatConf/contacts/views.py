@@ -1,20 +1,12 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
-from .models import ContactsList
-
+from .services import ContactListService
 
 class ContactView:
-    #get contacts list of a user
     @staticmethod
     def get_contacts(request):
-        curent_user = User.objects.get(pk=request.user.id)
-        contacts_list = ContactsList.objects.get_or_create(
-            user=curent_user
-            )
-        users_contact = ContactsList.objects.raw(
-            f'SELECT * FROM user_contacts_list_contacts \
-                WHERE contactslist_id={contacts_list[0].id};'
-            )
+        """get contacts list of a user"""
+        users_contact = ContactListService.get_user_contact_list(request.user.id) 
         context = {
             "user": request.user.id,
             "user_name": request.user.username,
@@ -22,11 +14,10 @@ class ContactView:
         }
         return render(request, 'contacts/users_contacts.html', context)
 
-    #get all users
     @staticmethod
     def get_all_users(request):
+        """get list of all users"""
         users = User.objects.values('id', 'username').all().order_by('-username')
-
         context = {
             "user": request.user.id,
             "user_name": request.user.username,
@@ -34,21 +25,14 @@ class ContactView:
         }
         return render(request, 'contacts/all_users.html', context)
 
-    #add contact to user's list
     @staticmethod
     def add_contact(request, id):
-        currend_user = User.objects.get(pk=request.user.id)
-        contacts_list = ContactsList.objects.get_or_create(
-            user = currend_user
-        )
-        contact = User.objects.get(pk=id)
-        contacts_list[0].contacts.add(contact)
-
+        """add contact to user's list"""
+        ContactListService.add_user_contac_list(request.user.id)
         return redirect('contacts')
 
     @staticmethod
     def delete_contact(request, id):
-        contact_list = ContactsList.objects.get(user_id=request.user.id)
-        contact = User.objects.get(id=id)
-        contact_list.contacts.remove(contact)
+        """delete a contact from user's contacts list"""
+        ContactListService.delete_user_from_contacs_list(request.user.id)
         return redirect('contacts')

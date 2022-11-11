@@ -23,6 +23,7 @@
     margin-top: 1rem;
     box-shadow: 0 0 5px #acc2cb;
     border-radius: 1rem;
+    opacity: .5;
 }
 .chat_action_inp{
     height: 3rem;
@@ -33,15 +34,14 @@
     outline: none;
     border: none;
     border-radius: 1rem 0 0 1rem;
-    background-color: #edf1f3;
 }
 .chat_action_btn{
     height: 3rem;
     width: 10%;
-    color: gray;
+    color: #00123c;
     cursor: pointer;
     font-size: 24px;
-    background-color: #edf1f3;
+    background-color: #fff;
     border: none;
     border-radius: 0 1rem 1rem 0;
 }
@@ -77,22 +77,22 @@
 .chat_name{
     height: 100%;
     width: 90%;
-
     display: flex;
     align-items: center;
-
     text-decoration: none;
-    color: black;
+    color: #1a2338;
     padding-left: 2rem;
-    transition: .5s;
+    transition: .5s cubic-bezier(0, 0.3, 0.55, 1);
 }
 .chat_name:hover{
     overflow: hidden;
+    font-weight: bold;
     padding-left: 4rem;
 }
 .delete_room_btn{
     width: 10%;
     font-size: 16px;
+    color: #00123c;
     font-weight: bold;
     cursor: pointer;
     background: none;

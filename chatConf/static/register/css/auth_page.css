@@ -11,7 +11,7 @@
     padding: 1rem;
     width: 500px;
     background-color: #fff;
-    box-shadow: 0 0 3px #e6eaf3;
+    box-shadow: 0 0 3px #acc2cb;
     border-radius: 1rem;
 }
 .auth_page_inner > form{
@@ -39,7 +39,6 @@
     background-color: #e6eaf3;
     border-radius: .7rem;
     outline: none;
-    
 }
 .auth_input:-webkit-autofill {
     transition: all 5000s ease-in-out;
@@ -50,11 +49,11 @@
     padding: .5rem 1rem;
     cursor: pointer;
     font-size: 16px;
-    color: #0e2d75;
+    color: #00123c;
     background-color: #e6eaf3;
     border: none;
     border-radius: .7rem;
 }
 .account > a{
-    color: black
+    color: #00123c
 }

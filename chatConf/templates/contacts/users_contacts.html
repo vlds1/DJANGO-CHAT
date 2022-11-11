@@ -7,7 +7,7 @@
         {% for user in users_contact %}
             <li class="user">
                 <div class="user_name">
-                    {{user}}
+                    <a href="{% url 'get_private_chat' user.user_id %}">{{user}}</a>
                 </div>
                 <div class="user_action">
                     <a href="{% url 'get_private_chat' user.user_id %}">
@@ -20,6 +20,11 @@
                     </a>
                 </div>
             </li>
+        {% empty %}
+            <div style="text-align: center;">
+                You have no any contacts
+                <a href="{% url 'all_users' %}">Add contacts</a>
+            </div>
         {% endfor %}
     </ul>
 </div>

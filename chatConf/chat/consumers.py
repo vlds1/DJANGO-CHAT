@@ -1,47 +1,21 @@
-# chat/consumers.py
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from .models import ChatRoomModel, ChatRoomMessage, PrivateChat, PrivateChatMessage
-from .views import get_all_chat_rooms, get_chat_room_messages, get_private_chat_messages
-
+from chat.services.consumers_services import ChatMessageService, ChatRoomService
+from .models import ChatRoomModel, PrivateChat
 
 class ChatsListConsumer(WebsocketConsumer):
     """connecting to list of chats page"""
-
     def create_chat_room(self, data):
-        # if chat exists its just add participant to it
-        try:
-            chat_exists = ChatRoomModel.objects.get(chat_room_name=data["chat_name"])
-            user = User.objects.get(id=data["user"])
-            chat_exists.participant.add(user)
-            chat = {
-                "id": str(chat_exists.id),
-                "chat_room_name": chat_exists.chat_room_name,
-            }
-            self.send(json.dumps({"chats": chat, "command": "create_new_chat"}))
-            
-        # if chat doesnt exists its create it and add owner to participants
-        except ObjectDoesNotExist:
-            creator = User.objects.get(id=data["user"])
-            new_chat = ChatRoomModel.objects.create(
-                owner=creator, chat_room_name=data["chat_name"]
-            )
-            new_chat.save()
-            new_chat.participant.add(creator)
-            chat = {"id": str(new_chat.id), "chat_room_name": new_chat.chat_room_name}
-            self.send(json.dumps({"chats": chat, "command": "create_new_chat"}))
+        """Checking if chat exists and add user to participant
+        or creating this and add to participant"""
+        data = ChatRoomService.create_chat_room(data)
+        self.send(json.dumps({"chats": data, "command": "create_new_chat"}))
 
     def delete_chat_room(self, data):
-        chat = ChatRoomModel.objects.get(id=data["chat_to_delete"])
-        participant = User.objects.get(id=data["user"])
-        chat.participant.remove(participant)
-        room_id = chat.id
-        # delete chat if its owner
-        if chat.owner_id == data["user"]:
-            chat.delete()
+        """Delete public chat room by its id"""
+        room_id = ChatRoomService.delete_chat_room(data)
         self.send(json.dumps({"id": room_id, "command": "deleted"}))
 
     commands = {
@@ -51,7 +25,7 @@ class ChatsListConsumer(WebsocketConsumer):
 
     def connect(self):
         self.accept()
-        chats = get_all_chat_rooms(self.scope["user"])
+        chats = ChatRoomService.get_all_chat_rooms(self.scope["user"])
         self.send(json.dumps({"chats": chats, "command": "get_all_chats"}))
 
     def disconnect(self, code):
@@ -64,70 +38,51 @@ class ChatsListConsumer(WebsocketConsumer):
 
 class ChatRoom(WebsocketConsumer):
     """Consumer for a general chat room"""
-
     def create_and_send_message(self, data):
-        if self.chat_type == 'public':
-            new_message = ChatRoomMessage.objects.create(
-                room_chat=ChatRoom.objects.get(chat_room_name=self.chat_name),
-                sender=User.objects.get(id=data["user"]),
-                text=data["message"],
-            )
-        else:
-            new_message = PrivateChatMessage.objects.create(
-                room_chat=PrivateChat.objects.get(chat_room_name=self.chat_name),
-                sender=User.objects.get(id=data["user"]),
-                text=data["message"],
-            )
-        new_message.save()
-
+        """Create message to send to a chat"""
+        new_message = ChatMessageService.create_chat_room_message(
+            data, self.chat_type, self.chat_name)
         async_to_sync(self.channel_layer.group_send)(
             self.chat_group_name,
             {
-                "type": "chat_message",
+                "type": "send_chat_message",
+                "user": int(new_message.sender_id),
                 "message": new_message.text,
                 "message_id": new_message.id,
-                "user": int(new_message.sender_id),
-            },
+            }
         )
 
-    def chat_message(self, event):
+    def send_chat_message(self, event):
+        """Send created message to users"""
         message = event["message"]
         user = User.objects.get(id=event["user"])
-        self.send(
-            text_data=json.dumps(
-                {   
+        self.send(text_data=json.dumps({   
                     "command": "create_message",
-                    "message": message,
                     "user": user.username,
+                    "message": message,
                     "message_id": str(event["message_id"]),
-                }
-            )
-        )
+                }))
 
     def delete_message(self, data):
-        if data['chat_type'] == 'private':
-            message_to_delete = PrivateChatMessage.objects.get(id=data['message_id'])
-            message_to_delete.delete()
-            async_to_sync(self.channel_layer.group_send)(
-                self.chat_group_name,
-                {   
-                    'type': 'deleted_message',
-                    'deleted_message_id': data['message_id']
-                }
-            )
-        else:
-            print('public')
-
-    def deleted_message(self, event):
-        deleted_messaeg_id = event['deleted_message_id']
-        self.send(
-            text_data = json.dumps(
-                {
-                    'command': 'delete_message',
-                    'deleted_messaeg_id': str(deleted_messaeg_id)
-                }
-            )
+        """Identify message and delete it"""
+        ChatMessageService.delete_chat_room_message(data)
+        async_to_sync(self.channel_layer.group_send)(
+            self.chat_group_name,
+            {   
+                'type': 'send_info_about_deleted_message',
+                'deleted_message_id': data['message_id']
+            }
         )
+
+    def send_info_about_deleted_message(self, event):
+        """Send info about deleted message to users"""
+        deleted_messaeg_id = event['deleted_message_id']
+        self.send(text_data = json.dumps(
+            {
+                'command': 'delete_message',
+                'deleted_messaeg_id': str(deleted_messaeg_id)
+            }
+        ))
 
 
     commands = {
@@ -144,13 +99,13 @@ class ChatRoom(WebsocketConsumer):
             self.chat_group_name, self.channel_name
         )
         self.accept()
-
+        print(self.chat_group_name)
         if self.chat_type == 'public':
             chat_room = ChatRoomModel.objects.get(chat_room_name=self.chat_name)
-            messages = get_chat_room_messages(chat_room.id)
+            messages = ChatMessageService.get_chat_room_messages(chat_room.id)
         else:
             private_chat = PrivateChat.objects.get(chat_room_name=self.chat_name)
-            messages = get_private_chat_messages(private_chat.id)
+            messages = ChatMessageService.get_private_chat_messages(private_chat.id)
         
         self.send(json.dumps({
                 "messages": messages, 

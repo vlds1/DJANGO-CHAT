@@ -17,12 +17,12 @@
 }
 .back{
     font-size: 24px;
-    color: black;
+    color: #00123c;
     text-decoration: none;
 }
 .title{
     text-align: center;
-    color: black;
+    color: #00123c;
     margin: 1rem 0;
     font-size: 28px;
 }
@@ -31,10 +31,9 @@
     height: 65%;
     padding: .5rem;
     background-color: white;
-    /* border: 2px solid black; */
     box-shadow: 0 0 3px #acc2cb;
     border-radius: 1rem 1rem 0 0;
-    overflow: hidden;
+    overflow: auto;
 }
 .chat_messages::-webkit-scrollbar {
     width: 3px;               
@@ -67,11 +66,9 @@
 .send_message_btn{
     height: 4rem;
     width: 10%;
-    color: #7a8ebb;
+    color: #00123c;
     font-size: 28px;
     border: none;
-    /* border-right: 2px solid black; */
-    /* border-bottom: 2px solid black; */
     border-radius: 0 0 1rem 0;
     background-color: white;
 }
@@ -115,7 +112,6 @@
 .message_user{
     font-size: 12px;
     font-weight: bold;
-    /* color: gray; */
 }
 .message_text{
     color: #686868;

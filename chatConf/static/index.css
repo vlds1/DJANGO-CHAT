@@ -7,6 +7,7 @@
 html{
     font-family: 'Roboto Mono', monospace;
     background-color: #e6eaf3;
+    color: #00123c;
 }
 .app{
     display: flex;
