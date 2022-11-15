@@ -1,10 +1,9 @@
-from enum import unique
 from django.db import models
 from django.contrib.auth.models import User
 
 
-class ChatRoomModel(models.Model):
-    """Chat room that can join anyone"""
+class PublicChat(models.Model):
+    """Public chat that can join anyone"""
     owner = models.ForeignKey(
         User,
         verbose_name="Owner of chat room",
@@ -22,19 +21,19 @@ class ChatRoomModel(models.Model):
         return self.chat_room_name
 
     class Meta:
-        db_table = "chat_rooms"
+        db_table = "public_chats"
         ordering = ["addition_time"]
-        verbose_name = "Chat room"
-        verbose_name_plural = "Chat rooms"
+        verbose_name = "Public chat"
+        verbose_name_plural = "Public chats"
 
 
-class ChatRoomMessage(models.Model):
-    """Model of message for a chat room"""
+class PublicChatMessage(models.Model):
+    """Model of message for a public chat"""
     room_chat = models.ForeignKey(
-        ChatRoomModel, verbose_name="Chat room", on_delete=models.CASCADE
+        PublicChat, verbose_name="Chat room", on_delete=models.CASCADE
         )
     sender = models.ForeignKey(
-        User, verbose_name="Sender", on_delete=models.CASCADE
+        User, verbose_name="Sender", related_name='sender', on_delete=models.CASCADE
         )
     text = models.TextField("Message")
     send_time = models.DateTimeField(auto_now_add=True)
@@ -43,10 +42,10 @@ class ChatRoomMessage(models.Model):
         return self.text
 
     class Meta:
-        db_table = "chat_room_messages"
+        db_table = "public_chats_messages"
         ordering = ["send_time"]
-        verbose_name = "Chat room message"
-        verbose_name_plural = "Chat room messages"
+        verbose_name = "Public chat message"
+        verbose_name_plural = "Public chat messages"
 
 
 class PrivateChat(models.Model):
@@ -66,7 +65,7 @@ class PrivateChat(models.Model):
         return self.chat_room_name
 
     class Meta:
-        db_table = 'privat_chats'
+        db_table = 'private_chats'
         ordering = ['addition_time']
         verbose_name = 'private chat'
         verbose_name_plural = 'private chats'

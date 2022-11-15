@@ -3,10 +3,9 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth.models import User
 from chat.services.consumers_services import ChatMessageService, ChatRoomService
-from .models import ChatRoomModel, PrivateChat
 
 class ChatsListConsumer(WebsocketConsumer):
-    """connecting to list of chats page"""
+    """connecting to list of chats page""" 
     def create_chat_room(self, data):
         """Checking if chat exists and add user to participant
         or creating this and add to participant"""
@@ -40,7 +39,7 @@ class ChatRoom(WebsocketConsumer):
     """Consumer for a general chat room"""
     def create_and_send_message(self, data):
         """Create message to send to a chat"""
-        new_message = ChatMessageService.create_chat_room_message(
+        new_message = ChatMessageService.create_chat_message(
             data, self.chat_type, self.chat_name)
         async_to_sync(self.channel_layer.group_send)(
             self.chat_group_name,
@@ -65,7 +64,7 @@ class ChatRoom(WebsocketConsumer):
 
     def delete_message(self, data):
         """Identify message and delete it"""
-        ChatMessageService.delete_chat_room_message(data)
+        ChatMessageService.delete_chat_message(data)
         async_to_sync(self.channel_layer.group_send)(
             self.chat_group_name,
             {   
@@ -98,15 +97,12 @@ class ChatRoom(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)(
             self.chat_group_name, self.channel_name
         )
+
         self.accept()
-        print(self.chat_group_name)
-        if self.chat_type == 'public':
-            chat_room = ChatRoomModel.objects.get(chat_room_name=self.chat_name)
-            messages = ChatMessageService.get_chat_room_messages(chat_room.id)
-        else:
-            private_chat = PrivateChat.objects.get(chat_room_name=self.chat_name)
-            messages = ChatMessageService.get_private_chat_messages(private_chat.id)
-        
+        messages = ChatMessageService.get_last_chat_messages(
+            chat_type= self.chat_type,
+            chat_name = self.chat_name
+        )
         self.send(json.dumps({
                 "messages": messages, 
                 "command": "get_last_messages"

@@ -22,19 +22,18 @@
             </div>
             <div class="send_message">
                 <input 
-                    class="send_message_inp" 
-                    id="message" 
-                    placeholder="Message" 
-                    type="text"
+                class="send_message_inp" 
+                id="message" 
+                placeholder="Message" 
+                type="text"
+            >
+            <button 
+                class="send_message_btn" 
+                id="send_message_btn"
                 >
-                <button 
-                    class="send_message_btn" 
-                    id="send_message_btn"
-                >
-                    >
-                </button>
+            >
+            </button>
             </div>
-
         </div>
     </div>
     {{chat_name|json_script:"chat_name"}}
@@ -79,11 +78,12 @@
 
         function createMessage(data){
             messages = data['messages']
+            console.log(messages)
             if(data['command'] == 'get_last_messages'){
                 for(i=0; i<messages.length; i++){
                     createMessageEl(
                     message=messages[i].text, 
-                    userName=messages[i].sender_id, 
+                    userName=messages[i].sender__username, 
                     message_id=messages[i].id
                     )
                 }

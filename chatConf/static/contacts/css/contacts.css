@@ -1,9 +1,21 @@
 .contacts_page{
+    position: relative;
     height: 100vh;
     width: 80vw;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.title{
+    position: absolute;
+    top: .5rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #1a2338;
+    font-size: 22px;
+    opacity: .5;
 }
 .contacts_page_inner_content{
     display: flex;

@@ -34,6 +34,7 @@ def getPrivateChat(request, contacts_user):
                     current_user_id = request.user.id,
                     contact_user_id = contacts_user
                     )
+    print("PRIVATE_CHAT: ",private_chat)
     friend = private_chat.chat_room_name.replace('_', '')
     friend = friend.replace(request.user.username, '')
 

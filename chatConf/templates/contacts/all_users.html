@@ -1,8 +1,9 @@
-{% extends 'contacts/contacts.html' %}
+{% extends 'contacts/index.html' %}
 
 {% block contacts %}
 <div class="contacts_page_content">
     <ul class="users_list">
+        <div class="title">Peoples</div>
         {% for user in users %}
             {% if user.username != user_name %}
                 <li class="user">

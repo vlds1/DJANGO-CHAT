@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import PrivateChat, PrivateChatMessage, \
-                    ChatRoomModel, ChatRoomMessage
+                    PublicChat, PublicChatMessage
 
 class PrivateChatAdmin(admin.ModelAdmin):
     list_display = ['chat_room_name', 'addition_time']
@@ -22,5 +22,5 @@ class ChatRoomMessageAdmin(admin.ModelAdmin):
     fields = ('text',)
     list_display = ['room_chat', 'sender', 'text', 'send_time']
 
-admin.site.register(ChatRoomModel, ChatRoomModelAdmin)
-admin.site.register(ChatRoomMessage, ChatRoomMessageAdmin)
+admin.site.register(PublicChat, ChatRoomModelAdmin)
+admin.site.register(PublicChatMessage, ChatRoomMessageAdmin)
